@@ -7,7 +7,7 @@ from datetime import datetime
 
 # --- Configure logging ---
 logging.basicConfig(
-    level=logging.DEBUG,  # Change to INFO if too verbose
+    level=logging.DEBUG, 
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S"
 )
@@ -20,7 +20,7 @@ try:
     github_token = os.environ["GITHUB_TOKEN"]
     repo = os.environ["GITHUB_REPOSITORY"]
     sha = os.environ["GITHUB_SHA"]
-    logging.debug("Environment variables loaded successfully.")
+    logging.debug(f"Environment variables loaded successfully {locals()}.")
 except KeyError as e:
     logging.critical(f"❌ Missing environment variable: {e}")
     exit(1)
