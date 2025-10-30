@@ -45,7 +45,6 @@ logging.info(f"🧩 Changed Python files: {changed_files}")
 
 def parse_gemini_json(response):
     try:
-        text = response["candidates"][0]["content"]["text"]
         text = response["candidates"][0]["content"]["parts"][0]["text"]
         text = re.sub(r"^```[a-zA-Z]*\n?|```$", "", text.strip())
         return json.loads(text)
