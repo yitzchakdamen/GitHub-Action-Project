@@ -49,10 +49,15 @@ def check_with_gemini(filename):
         code = f.read()
 
     prompt = f"""
-    You are a code reviewer. Analyze this Python code and return a JSON object with:
-    - valid: true/false
-    - errors: a list of objects, each with 'line' and 'message'
-    Return only raw JSON, without markdown or extra text.
+    You are a code reviewer.
+    Analyze this Python code and respond ONLY with valid JSON.
+    Do NOT include markdown, code fences, explanations, or extra text.
+    If you add anything else, your output will be rejected.
+    Return exactly:
+    {
+    "valid": true/false,
+    "errors": [{"line": number, "message": string}]
+    }
     Check the following code:
     {code}
     """
