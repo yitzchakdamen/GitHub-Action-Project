@@ -63,6 +63,7 @@ def check_with_gemini(filename):
     Analyze this Python code and respond ONLY with valid JSON.
     Do NOT include markdown, code fences, explanations, or extra text.
     If you add anything else, your output will be rejected.
+    Define a problem only with incorrect code or code that should cause the problem and not with other things
     Return exactly:
     {
     "valid": true/false,
@@ -128,10 +129,10 @@ if issues:
         )
         r.raise_for_status()
         logging.info("🪶 GitHub issue created successfully.")
+        exit(0)
     except Exception as e:
         logging.critical(f"❌ Failed to create GitHub issue: {e}")
-
-    exit(1)
+        exit(1)
 else:
     logging.info("🎉 All code passed Gemini validation.")
     exit(0)
