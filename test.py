@@ -11,12 +11,13 @@ def test_function_b():
 
 # Update Gemini API request to include API key in headers; adjust JSON structure for prompt
 
-
+ 
+ 
 
 
 
 # def parse_gemini_json_2(response):
-#     import re, json
+#     import re, json 
 #     text = response
 #     text = re.sub(r"^```[a-zA-Z]*\n?|```$", "", text.strip())
 #     return json.loads(text)
