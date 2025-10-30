@@ -73,8 +73,8 @@ def check_with_gemini(filename):
         return response.json()
     except Exception as e:
         logging.error(f"❌ Failed to communicate with Gemini API for {filename}: {e}")
-        return None
-
+        exit(1)
+        
 # --- Check each changed file ---
 issues = []
 
