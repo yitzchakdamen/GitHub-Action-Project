@@ -52,6 +52,7 @@ def check_with_gemini(filename):
     You are a code reviewer. Analyze this Python code and return a JSON object with:
     - valid: true/false
     - errors: a list of objects, each with 'line' and 'message'
+    Return only raw JSON, without markdown or extra text.
     Check the following code:
     {code}
     """
