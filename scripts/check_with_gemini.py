@@ -1,5 +1,6 @@
 import os
 import requests
+import re
 import json
 import subprocess
 import logging
@@ -41,6 +42,16 @@ if not changed_files:
     exit(0)
 
 logging.info(f"🧩 Changed Python files: {changed_files}")
+
+def parse_gemini_json(response):
+    try:
+        text = response["candidates"][0]["content"]["text"]
+        text = response["candidates"][0]["content"]["parts"][0]["text"]
+        text = re.sub(r"^```[a-zA-Z]*\n?|```$", "", text.strip())
+        return json.loads(text)
+    except (KeyError, json.JSONDecodeError) as e:
+        logging.error(f"❌ Error parsing Gemini JSON response: {e}")
+        exit(1)
 
 # --- Function: Send code to Gemini for validation ---
 def check_with_gemini(filename):
@@ -84,8 +95,7 @@ for file in changed_files:
         continue
 
     try:
-        text = result["candidates"][0]["content"]["parts"][0]["text"]
-        data = json.loads(text)
+        data = parse_gemini_json(result)
         if not data.get("valid", True):
             logging.warning(f"⚠️ Issues found in {file}")
             issues.append((file, data.get("errors", [])))

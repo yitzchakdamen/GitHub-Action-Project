@@ -10,3 +10,4 @@ def test_function_b():
 # 1234
 
 # Update Gemini API request to include API key in headers; adjust JSON structure for prompt
+
