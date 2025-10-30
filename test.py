@@ -7,4 +7,6 @@ def test_function_a():
 def test_function_b():
     print("This is a test function.")
 
-# 123
+# 1234
+
+# Update Gemini API request to include API key in headers; adjust JSON structure for prompt

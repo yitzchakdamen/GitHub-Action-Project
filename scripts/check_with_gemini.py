@@ -64,9 +64,8 @@ def check_with_gemini(filename):
     try:
         response = requests.post(
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
-            headers={"Content-Type": "application/json"},
-            params={"key": gemini_key},
-            json={"contents": [{"parts": [{"text": f"{prompt} {code}"}]}], "temperature": 0.0},
+            headers={"Content-Type": "application/json", "x-goog-api-key": gemini_key},
+            json={"contents": [{"parts": {"text": f"{prompt} {code}"}}]},
         )
         response.raise_for_status()
         logging.debug(f"Gemini raw response for {filename}: {response.text[:500]}...")
