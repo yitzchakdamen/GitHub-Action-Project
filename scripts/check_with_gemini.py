@@ -13,7 +13,7 @@ logging.basicConfig(
     datefmt="%H:%M:%S"
 )
 
-logging.info("🚀 Gemini Code Check process started.")
+logging.info("Gemini Code Check process started.")
 
 # --- Environment variables ---
 try:
@@ -23,11 +23,11 @@ try:
     sha = os.environ["GITHUB_SHA"]
     logging.debug(f"Environment variables loaded successfully .")
 except KeyError as e:
-    logging.critical(f"❌ Missing environment variable: {e}")
+    logging.critical(f"Missing environment variable: {e}")
     exit(1)
 
 # --- Find changed Python files ---
-logging.info("🔍 Detecting changed Python files...")
+logging.info("Detecting changed Python files...")
 result = subprocess.run(["git", "diff", "--name-only", "HEAD~1"], capture_output=True, text=True)
 logging.debug(f"Git diff output:\n{result.stdout}")
 
@@ -38,10 +38,10 @@ changed_files = [
 ]
 
 if not changed_files:
-    logging.info("✅ No Python files changed. Exiting.")
+    logging.info("No Python files changed. Exiting.")
     exit(0)
 
-logging.info(f"🧩 Changed Python files: {changed_files}")
+logging.info(f"Changed Python files: {changed_files}")
 
 def parse_gemini_json(response):
     try:
@@ -49,12 +49,12 @@ def parse_gemini_json(response):
         text = re.sub(r"^```[a-zA-Z]*\n?|```$", "", text.strip())
         return json.loads(text)
     except (KeyError, json.JSONDecodeError) as e:
-        logging.error(f"❌ Error parsing Gemini JSON response: {e}")
+        logging.error(f"Error parsing Gemini JSON response: {e}")
         exit(1)
 
 # --- Function: Send code to Gemini for validation ---
 def check_with_gemini(filename):
-    logging.info(f"📤 Sending {filename} to Gemini for analysis...")
+    logging.info(f"Sending {filename} to Gemini for analysis...")
     with open(filename, "r", encoding="utf-8") as f:
         code = f.read()
 
@@ -82,14 +82,14 @@ def check_with_gemini(filename):
         logging.debug(f"Gemini raw response for {filename}: {response.text[:500]}...")
         return response.json()
     except Exception as e:
-        logging.error(f"❌ Failed to communicate with Gemini API for {filename}: {e}")
+        logging.error(f" Failed to communicate with Gemini API for {filename}: {e}")
         exit(1)
         
 # --- Check each changed file ---
 issues = []
 
 for file in changed_files:
-    logging.info(f"🧠 Checking file: {file}")
+    logging.info(f"Checking file: {file}")
     result = check_with_gemini(file)
     if not result:
         continue
@@ -97,19 +97,19 @@ for file in changed_files:
     try:
         data = parse_gemini_json(result)
         if not data.get("valid", True):
-            logging.warning(f"⚠️ Issues found in {file}")
+            logging.warning(f"Issues found in {file}")
             issues.append((file, data.get("errors", [])))
         else:
-            logging.info(f"✅ {file} passed Gemini validation.")
+            logging.info(f"{file} passed Gemini validation.")
     except Exception as e:
-        logging.error(f"❌ Error parsing Gemini response for {file}: {e}")
+        logging.error(f"Error parsing Gemini response for {file}: {e}")
 
 # --- If issues found, create a GitHub issue ---
 if issues:
-    logging.info("🚨 Issues detected. Creating GitHub issue...")
+    logging.info("Issues detected. Creating GitHub issue...")
     issue_body = "### Issues found in the submitted code:\n"
     for file, errs in issues:
-        issue_body += f"\n#### 📝 {file}\n"
+        issue_body += f"\n#### {file}\n"
         for err in errs:
             issue_body += f"- Line {err.get('line', '?')}: {err.get('message', 'Unknown error')}\n"
 
@@ -128,11 +128,11 @@ if issues:
             json=issue_data
         )
         r.raise_for_status()
-        logging.info("🪶 GitHub issue created successfully.")
+        logging.info(" GitHub issue created successfully.")
         exit(0)
     except Exception as e:
         logging.critical(f"❌ Failed to create GitHub issue: {e}")
         exit(1)
 else:
-    logging.info("🎉 All code passed Gemini validation.")
+    logging.info("All code passed Gemini validation.")
     exit(0)
