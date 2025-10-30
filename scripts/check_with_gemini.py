@@ -20,7 +20,7 @@ try:
     github_token = os.environ["GITHUB_TOKEN"]
     repo = os.environ["GITHUB_REPOSITORY"]
     sha = os.environ["GITHUB_SHA"]
-    logging.debug(f"Environment variables loaded successfully {locals()}.")
+    logging.debug(f"Environment variables loaded successfully .")
 except KeyError as e:
     logging.critical(f"❌ Missing environment variable: {e}")
     exit(1)
