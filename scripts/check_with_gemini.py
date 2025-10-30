@@ -58,7 +58,7 @@ def check_with_gemini(filename):
 
     try:
         response = requests.post(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent",
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
             headers={"Content-Type": "application/json"},
             params={"key": gemini_key},
             json={"contents": [{"parts": [{"text": prompt}]}]},
