@@ -59,16 +59,33 @@ def check_with_gemini(filename):
         code = f.read()
 
     prompt = """
-    You are a code reviewer.
-    Analyze this Python code and respond ONLY with valid JSON.
+    You are a strict Python syntax and runtime validator.
+    Analyze the provided Python code and return ONLY a valid JSON object.
     Do NOT include markdown, code fences, explanations, or extra text.
-    If you add anything else, your output will be rejected.
-    Define a problem only with incorrect code or code that should cause the problem and not with other things
-    Return exactly:
+
+    Check ONLY for real Python errors that would prevent the code from running,
+    such as SyntaxError, IndentationError, NameError, or runtime exceptions.
+    Do NOT report issues related to style, formatting, naming conventions,
+    or subjective code quality.
+
+    If the code is completely valid and would run successfully,
+    return exactly:
     {
-    "valid": true/false,
-    "errors": [{"line": number, "message": string}]
+    "valid": true,
+    "errors": []
     }
+
+    If the code contains actual errors, return:
+    {
+    "valid": false,
+    "errors": [
+        {"line": <line_number>, "message": "<error_description>"}
+    ]
+    }
+
+    Do not invent or imagine problems. Only include real errors that would
+    cause the Python interpreter to fail.
+
     Check the following code:
     """
 
