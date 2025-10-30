@@ -48,7 +48,7 @@ def check_with_gemini(filename):
     with open(filename, "r", encoding="utf-8") as f:
         code = f.read()
 
-    prompt = f"""
+    prompt = """
     You are a code reviewer.
     Analyze this Python code and respond ONLY with valid JSON.
     Do NOT include markdown, code fences, explanations, or extra text.
@@ -59,7 +59,6 @@ def check_with_gemini(filename):
     "errors": [{"line": number, "message": string}]
     }
     Check the following code:
-    {code}
     """
 
     try:
@@ -67,7 +66,7 @@ def check_with_gemini(filename):
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
             headers={"Content-Type": "application/json"},
             params={"key": gemini_key},
-            json={"contents": [{"parts": [{"text": prompt}]}]},
+            json={"contents": [{"parts": [{"text": f"{prompt} {code}"}]}], "temperature": 0.0},
         )
         response.raise_for_status()
         logging.debug(f"Gemini raw response for {filename}: {response.text[:500]}...")
